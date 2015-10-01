@@ -145,8 +145,28 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 
 
 	// Calculate time interval, and normal time required for later curve calculations
+	intervalTime = controlPoints[nextPoint].time();
+	intervalTime = intervalTime-time;
+mal time required for later curve calculations
+	intervalTime = controlPoints[nextPoint].time();
+	intervalTime = intervalTime-time;
+	//how do you normalize data though?
 
 	// Calculate position at t = time on Hermite curve
+	//do we use the param time, intervalTime, or normalized intervalTime? 
+	//Like what was the point of finding intervalTime?
+
+	//blending functions used to determine h1 thru h4
+	float h1, h2, h3, h4;
+	//h1 = 2t^3 - 3t^2 + 1
+	h1 = (2*pow(intervalTime, 3)) - (3*pow(intervalTime,2)) + 1;
+	//h2 = -2t^3 + 3t^2
+	h2 = (-2*pow(time,3)) + (3*pow(intervalTime,2));
+	//h3 = t^3 - 2t^2 + t
+	h3 = pow(intervalTime,3) - (2*pow(intervalTime,2)) + intervalTime;
+	//h4 = t^3 - t^2
+	h4 = pow(intervalTime,3) - pow(intervalTime,2);
+	
 
 	// Return result
 	return newPosition;
