@@ -121,11 +121,13 @@ bool Curve::findTimeInterval(unsigned int& nextPoint, float time)
 {
        int i = 0;
        for(; i < controlPoints.size() && (controlPoints[i]).time <= time; i++);
+       
        if(i < controlPoints.size())
        {
 	 nextPoint = i;
 	 return true;
        }
+       
        return false;
 }
 
