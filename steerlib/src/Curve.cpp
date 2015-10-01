@@ -147,7 +147,6 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 	// Calculate time interval, and normal time required for later curve calculations
 	intervalTime = controlPoints[nextPoint].time();
 	intervalTime = intervalTime-time;
-mal time required for later curve calculations
 	intervalTime = controlPoints[nextPoint].time();
 	intervalTime = intervalTime-time;
 	//how do you normalize data though?
@@ -166,8 +165,9 @@ mal time required for later curve calculations
 	h3 = pow(intervalTime,3) - (2*pow(intervalTime,2)) + intervalTime;
 	//h4 = t^3 - t^2
 	h4 = pow(intervalTime,3) - pow(intervalTime,2);
-	
 
+	//h1,h2 correlate with position; h3,h4 correlate with tangent
+	newPosition = h1*controlPoints[nextPoint-1].position + h2*controlPoints[nextPoint].position + h3*controlPoints[nextPoint-1].tangent + h4*controlPoints[nextPoint].tangent;
 	// Return result
 	return newPosition;
 }
