@@ -44,12 +44,26 @@ void Curve::addControlPoints(const std::vector<CurvePoint>& inputPoints)
 void Curve::drawCurve(Color curveColor, float curveThickness, int window)
 {
 #ifdef ENABLE_GUI
-
 	// Robustness: make sure there is at least two control point: start and end points
 		if(!checkRobust())
 			return false;
 		else{
-	// Move on the curve from t=0 to t=finalPoint, using window as step size, and linearly interpolate the curve points	
+	// Move on the curve from t=0 to t=finalPoint, using window as step size, and linearly interpolate the curve points
+			float t0 = controlPoints.front().time;
+			float tFinal = controlPoints.back().time;
+			Point back = controlPoints.front().position;
+			Point curr = controlPoints.front().position;
+
+			for(t = window; t <= tFinal; t += window){
+				if(t > tFinal - window) //final point
+					curr = controlPoints.back().position;
+				else{
+	//Calculate the next point, draw the line, update the tracer
+					calculatePoint(curr, t);
+					drawLine(back, curr, curveColor, curveThickness);
+					back = curr;
+				}
+			}
 		}
 	
 	return;
