@@ -174,14 +174,48 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 // Implement Catmull-Rom curve
 Point Curve::useCatmullCurve(const unsigned int nextPoint, const float time)
 {
-	Point newPosition;
-	float dT1, dT2,dTSurround, dTAverage;
-	Vector v1, v2, v;
+	Point newPosition, curr, back;
+	float t0,t1, normalTime, intervalTime;
+	Vector v1, v2;
 
 	// Calculate time interval, and normal time required for later curve calculations
+	t0 = controlPoints[nextPoint-1].time;
+	t1 = controlPoints[nextPoint].time;
+
+	intervalTime = t1 - t0;
+	normalTime = (time - t0) / intervalTime;
 
 	// Calculate position at t = time on Catmull-Rom curve
 	
+	if(nextPoint == 1) //first point
+	{
+	v1 = (controlPoints[nextPoint].position - controlPoints[nextPoint-1].position)/intervalTime;
+	v2 = (controlPoints[nextPoint+1].position - controlPoints[nextPoint-1].position)/(controlPoints[nextPoint+1].time - t0);
+	}
+	else if (nextPoint == controlPoints.size()-1) //final point
+	{
+	v1 = (controlPoints[nextPoint].position - controlPoints[nextPoint-2].position)/(t1 - controlPoints([nextPoint-2].time);
+	v2 = (controlPoints[nextPoint].position - controlPoints[nextPoint-1].position)/intervalTime;
+	}
+	else //inbetween points
+	{
+	v1 = (controlPoints[nextPoint].position - controlPoints[nextPoint-2].position)/(t1 - controlPoints([nextPoint-2].time);
+	v2 = (controlPoints[nextPoint+1].position - controlPoints[nextPoint-1].position)/(controlPoints[nextPoint+1].time - t0);
+	}
+
+	float tcube, tsquare;
+	tcube = normalTime*normalTime*normalTime;
+	tsquare = normalTime*normalTime;
+
+	//Blending Functions
+	h1 = (2*tcube) - (3*tsquare) + 1;
+	h2 = (-2*tcube) + (3*tsquare);
+	h3 = tcube - (2*tsquare) + normalTime;
+	h4 = tcube - tsquare;
+
+	newPosition = h1*controlPoints[nextPoint-1].position + h2*controlPoints[nextPoint].position
+			+ intervalTime*h3*v1 + intervalTime*h4*v2;
+
 	// Return result
 	return newPosition;
 }
