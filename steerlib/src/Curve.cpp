@@ -45,18 +45,12 @@ void Curve::drawCurve(Color curveColor, float curveThickness, int window)
 {
 #ifdef ENABLE_GUI
 
-	//================DELETE THIS PART AND THEN START CODING===================
-	static bool flag = false;
-	if (!flag)
-	{
-		std::cerr << "ERROR>>>>Member function drawCurve is not implemented!" << std::endl;
-		flag = true;
-	}
-	//=========================================================================
-
 	// Robustness: make sure there is at least two control point: start and end points
-
-	// Move on the curve from t=0 to t=finalPoint, using window as step size, and linearly interpolate the curve points
+		if(!checkRobust())
+			return false;
+		else{
+	// Move on the curve from t=0 to t=finalPoint, using window as step size, and linearly interpolate the curve points	
+		}
 	
 	return;
 #endif
@@ -181,16 +175,8 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 Point Curve::useCatmullCurve(const unsigned int nextPoint, const float time)
 {
 	Point newPosition;
-
-	//================DELETE THIS PART AND THEN START CODING===================
-	static bool flag = false;
-	if (!flag)
-	{
-		std::cerr << "ERROR>>>>Member function useCatmullCurve is not implemented!" << std::endl;
-		flag = true;
-	}
-	//=========================================================================
-
+	float dT1, dT2,dTSurround, dTAverage;
+	Vector v1, v2, v;
 
 	// Calculate time interval, and normal time required for later curve calculations
 
