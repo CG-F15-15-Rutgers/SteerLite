@@ -148,17 +148,10 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 
 
 	// Calculate time interval, and normal time required for later curve calculations
-	intervalTime = controlPoints[nextPoint].time;
-	intervalTime = intervalTime-time;
-	//intervalTime = controlPoints[nextPoint].time - controlPoints[nextPoint-1].time;
-
-	//how do you normalize data though?
-
-	//using the answer from this http://stats.stackexchange.com/questions/70801/how-to-normalize-data-to-0-1-range
-	//normalizedTime = (time - min(time))/((max(time)) - (min(time))
-
-	//max index = size - 1; min index = 0
-	normalTime = (time - controlPoints[0].time)/((controlPoints[controlPoints.size()-1].time) - (controlPoints[0].time));
+	//intervalTime = controlPoints[nextPoint].time;
+	//intervalTime = intervalTime-time;
+	intervalTime = controlPoints[nextPoint].time - controlPoints[nextPoint-1].time;
+	normalTime = (time - controlPoints[nextPoint-1].time)/(intervalTime);
 
 	// Calculate position at t = time on Hermite curve
 	//do we use the param time, intervalTime, or normalTime? 
@@ -166,18 +159,20 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 
 	//blending functions used to determine h1 thru h4
 	float h1, h2, h3, h4;
-	float usefulTime = intervalTime; //whatever time we actually end up using 
+	float tcube, tsquare;
+	tcube = normalTime*normalTime*normalTime;
+	tsquare = normalTime*normalTime;
 	//h1 = 2t^3 - 3t^2 + 1
-	h1 = (2*pow(usefulTime, 3)) - (3*pow(usefulTime,2)) + 1;
+	h1 = (2*tcube) - (3*tsquare) + 1;
 	//h2 = -2t^3 + 3t^2
-	h2 = (-2*pow(usefulTime,3)) + (3*pow(usefulTime,2));
+	h2 = (-2*tcube) + (3*tsquare);
 	//h3 = t^3 - 2t^2 + t
-	h3 = pow(usefulTime,3) - (2*pow(usefulTime,2)) + usefulTime;
+	h3 = tcube - (2*tsquare) + normalTime;
 	//h4 = t^3 - t^2
-	h4 = pow(usefulTime,3) - pow(usefulTime,2);
+	h4 = tcube - tsquare;
 
 	//h1,h2 correlate with position; h3,h4 correlate with tangent
-	newPosition = h1*controlPoints[nextPoint-1].position + h2*controlPoints[nextPoint].position + h3*controlPoints[nextPoint-1].tangent + h4*controlPoints[nextPoint].tangent;
+	newPosition = (h1*controlPoints[nextPoint-1].position) + (h2*controlPoints[nextPoint].position) + (h3*controlPoints[nextPoint-1].tangent) + (h4*controlPoints[nextPoint].tangent);
 	// Return result
 	return newPosition;
 }
