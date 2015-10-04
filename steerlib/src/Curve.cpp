@@ -12,6 +12,7 @@
 #include <util/DrawLib.h>
 #include "Globals.h"
 
+
 using namespace Util;
 
 Curve::Curve(const CurvePoint& startPoint, int curveType) : type(curveType)
@@ -46,21 +47,23 @@ void Curve::drawCurve(Color curveColor, float curveThickness, int window)
 #ifdef ENABLE_GUI
 	// Robustness: make sure there is at least two control point: start and end points
 		if(!checkRobust())
-			return false;
+			return;
 		else{
 	// Move on the curve from t=0 to t=finalPoint, using window as step size, and linearly interpolate the curve points
-			float t0 = controlPoints.front().time;
+			float t = controlPoints.front().time;
 			float tFinal = controlPoints.back().time;
 			Point back = controlPoints.front().position;
 			Point curr = controlPoints.front().position;
-
+			
 			for(t = window; t <= tFinal; t += window){
+
 				if(t > tFinal - window) //final point
 					curr = controlPoints.back().position;
 				else{
 	//Calculate the next point, draw the line, update the tracer
 					calculatePoint(curr, t);
-					drawLine(back, curr, curveColor, curveThickness);
+					//std::cout << "t " << t << " point " << curr.x << "," << curr.y << "," << curr.z << std::endl;
+					DrawLib::drawLine(back, curr, curveColor, curveThickness);
 					back = curr;
 				}
 			}
@@ -133,6 +136,7 @@ bool Curve::findTimeInterval(unsigned int& nextPoint, float time)
        if(i < controlPoints.size())
        {
 	 nextPoint = i;
+	 // std::cout << "findTimeInterval " << nextPoint << std::endl;
 	 return true;
        }
        
@@ -144,6 +148,9 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 {
 	Point newPosition;
 	float normalTime, intervalTime;
+
+	std::cout << "useHermiteCurve" << std::endl;
+
 	// Calculate time interval, and normal time required for later curve calculations
 	//intervalTime = controlPoints[nextPoint].time;
 	//intervalTime = intervalTime-time;
@@ -197,12 +204,12 @@ Point Curve::useCatmullCurve(const unsigned int nextPoint, const float time)
 	}
 	else if (nextPoint == controlPoints.size()-1) //final point
 	{
-	v1 = (controlPoints[nextPoint].position - controlPoints[nextPoint-2].position)/(t1 - controlPoints([nextPoint-2].time);
+	  v1 = (controlPoints[nextPoint].position - controlPoints[nextPoint-2].position)/(t1 - controlPoints[nextPoint-2].time);
 	v2 = (controlPoints[nextPoint].position - controlPoints[nextPoint-1].position)/intervalTime;
 	}
 	else //inbetween points
 	{
-	v1 = (controlPoints[nextPoint].position - controlPoints[nextPoint-2].position)/(t1 - controlPoints([nextPoint-2].time);
+	v1 = (controlPoints[nextPoint].position - controlPoints[nextPoint-2].position)/(t1 - controlPoints[nextPoint-2].time);
 	v2 = (controlPoints[nextPoint+1].position - controlPoints[nextPoint-1].position)/(controlPoints[nextPoint+1].time - t0);
 	}
 
@@ -211,10 +218,10 @@ Point Curve::useCatmullCurve(const unsigned int nextPoint, const float time)
 	tsquare = normalTime*normalTime;
 
 	//Blending Functions
-	h1 = (2*tcube) - (3*tsquare) + 1;
-	h2 = (-2*tcube) + (3*tsquare);
-	h3 = tcube - (2*tsquare) + normalTime;
-	h4 = tcube - tsquare;
+	float h1 = (2*tcube) - (3*tsquare) + 1;
+	float h2 = (-2*tcube) + (3*tsquare);
+	float h3 = tcube - (2*tsquare) + normalTime;
+	float h4 = tcube - tsquare;
 
 	newPosition = h1*controlPoints[nextPoint-1].position + h2*controlPoints[nextPoint].position
 			+ intervalTime*h3*v1 + intervalTime*h4*v2;
