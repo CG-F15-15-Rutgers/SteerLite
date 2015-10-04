@@ -144,17 +144,6 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 {
 	Point newPosition;
 	float normalTime, intervalTime;
-
-	//================DELETE THIS PART AND THEN START CODING===================
-	static bool flag = false;
-	if (!flag)
-	{
-		std::cerr << "ERROR>>>>Member function useHermiteCurve is not implemented!" << std::endl;
-		flag = true;
-	}
-	//=========================================================================
-
-
 	// Calculate time interval, and normal time required for later curve calculations
 	//intervalTime = controlPoints[nextPoint].time;
 	//intervalTime = intervalTime-time;
