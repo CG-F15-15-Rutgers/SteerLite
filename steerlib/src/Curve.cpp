@@ -12,6 +12,7 @@
 #include <util/DrawLib.h>
 #include "Globals.h"
 
+//#define VERBOSE
 
 using namespace Util;
 
@@ -46,6 +47,10 @@ void Curve::drawCurve(Color curveColor, float curveThickness, int window)
 {
 #ifdef ENABLE_GUI
 	// Robustness: make sure there is at least two control point: start and end points
+
+#ifdef VERBOSE
+  std::cout << "drawCurve" << std::endl;
+#endif
 		if(!checkRobust())
 			return;
 		else{
@@ -64,7 +69,9 @@ void Curve::drawCurve(Color curveColor, float curveThickness, int window)
 			  */
 	//Calculate the next point, draw the line, update the tracer
 					calculatePoint(curr, t);
+#ifdef VERBOSE
 					std::cout << "t " << t << " point " << curr.x << "," << curr.y << "," << curr.z << std::endl;
+#endif
 					DrawLib::drawLine(back, curr, curveColor, curveThickness);
 					back = curr;
 					//}
@@ -80,6 +87,9 @@ void Curve::drawCurve(Color curveColor, float curveThickness, int window)
 // Sort controlPoints vector in ascending order: min-first
 void Curve::sortControlPoints()
 {
+#ifdef VERBOSE
+  std::cout << "sortControlPoints" << std::endl;
+#endif
         for(int i = 0; i < controlPoints.size()-1; i++)
 	{
 	  int indMinElement = i;
@@ -87,7 +97,7 @@ void Curve::sortControlPoints()
 	  {
 	    if((controlPoints[j]).time < (controlPoints[indMinElement]).time)
 	    {
-	      int indMinElement = j;
+	      indMinElement = j;
 	    }
 	  }
 	  std::swap(controlPoints[i], controlPoints[indMinElement]);
@@ -134,13 +144,26 @@ bool Curve::checkRobust()
 // Find the current time interval (i.e. index of the next control point to follow according to current time)
 bool Curve::findTimeInterval(unsigned int& nextPoint, float time)
 {
+#ifdef VERBOSE
+  std::cout << "findTimeInterval time " << time << std::endl;
+  for (int j=0; j<controlPoints.size() ; j++)
+    std::cout 	    << controlPoints[j].time << std::endl;
+#endif
+
+
        int i = 0;
-       for(; i < controlPoints.size() && (controlPoints[i]).time <= time; i++);
-       
-       if(i < controlPoints.size())
+       for(; i < controlPoints.size() && (controlPoints[i]).time <= time; i++)
+#ifdef VERBOSE
+	 std::cout << "findTimeInterval " << controlPoints[i].time << std::endl;
+#endif
+;
+
+      if(i < controlPoints.size())
        {
 	 nextPoint = i;
-	 // std::cout << "findTimeInterval " << nextPoint << std::endl;
+#ifdef VERBOSE
+	 std::cout << "findTimeInterval " << nextPoint << std::endl;
+#endif
 	 return true;
        }
        
@@ -150,11 +173,14 @@ bool Curve::findTimeInterval(unsigned int& nextPoint, float time)
 // Implement Hermite curve
 Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 {
+
 	Point newPosition;
 	Util::Vector vect;
 	float normalTime, intervalTime;
 
+#ifdef VERBOSE
 	std::cout << "useHermiteCurve" << std::endl;
+#endif
 
 	// Calculate time interval, and normal time required for later curve calculations
 	//intervalTime = controlPoints[nextPoint].time;
@@ -169,8 +195,8 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 	//blending functions used to determine h1 thru h4
 	float h1, h2, h3, h4;
 	float tcube, tsquare;
-	tcube = normalTime*normalTime*normalTime;
 	tsquare = normalTime*normalTime;
+	tcube = tsquare*normalTime;
 	//h1 = 2t^3 - 3t^2 + 1
 	h1 = (2*tcube) - (3*tsquare) + 1;
 	//h2 = -2t^3 + 3t^2
@@ -185,14 +211,18 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 	Point p3, p4;
 
 	vect = controlPoints[nextPoint-1].tangent * (h3 * intervalTime);
+	//vect = controlPoints[nextPoint-1].tangent * (h3 * 1); // times "1" because the time is normalized
 	p3 = Point(vect[0],vect[1], vect[2]);
 
 	vect = controlPoints[nextPoint].tangent * (h4 * intervalTime);
+	//vect = controlPoints[nextPoint].tangent * (h4 * 1);  // times "1" because the time is normalized
 	p4 = Point(vect[0],vect[1],vect[2]);
 
 	//h1,h2 correlate with position; h3,h4 correlate with tangent
 	//newPosition = (h1*controlPoints[nextPoint-1].position) + (h2*controlPoints[nextPoint].position) + (h3*controlPoints[nextPoint-1].tangent) + (h4*controlPoints[nextPoint].tangent);
 	newPosition = p1 + p2 + p3 + p4;
+
+	//newPosition = intervalTime * newPosition;
 	// Return result
 	return newPosition;
 }
@@ -203,7 +233,9 @@ Point Curve::useCatmullCurve(const unsigned int nextPoint, const float time)
 	Point newPosition, curr, back;
 	float t0,t1, normalTime, intervalTime;
 	Vector v1, v2;
-
+#ifdef VERBOSE
+	std::cout << "useCatmullCurve " << nextPoint <<  std::endl;
+#endif
 	// Calculate time interval, and normal time required for later curve calculations
 	t0 = controlPoints[nextPoint-1].time;
 	t1 = controlPoints[nextPoint].time;
@@ -243,5 +275,6 @@ Point Curve::useCatmullCurve(const unsigned int nextPoint, const float time)
 			+ intervalTime*h3*v1 + intervalTime*h4*v2;
 
 	// Return result
+
 	return newPosition;
 }

@@ -1,0 +1,181 @@
+<SteerBenchTestCase xmlns="http://www.magix.ucla.edu/steerbench"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://www.magix.ucla.edu/steerbench 
+                                        TestCaseSchema.xsd">
+
+  <header>
+    <version>1.0</version>
+    <name>mycurve</name>
+    <worldBounds>
+      <xmin>-100</xmin>
+      <xmax>100</xmax>
+      <ymin>0</ymin>
+      <ymax>0</ymax>
+      <zmin>-100</zmin>
+      <zmax>100</zmax>
+    </worldBounds>
+  </header>
+
+ <suggestedCameraView>
+    <position> <x>-5</x> <y>20</y> <z>-5</z> </position>
+    <lookat> <x>0</x> <y>0</y> <z>-5</z> </lookat>
+    <up> <x>0</x> <y>1</y> <z>0</z> </up>
+    <fovy>45</fovy>
+    <targetTangent> <x>0</x> <y>0</y> <z>0</z> </targetTangent>
+    <targetTime>0</targetTime>
+  </suggestedCameraView>
+
+  <suggestedCameraView>
+    <position> <x>20</x> <y>20</y> <z>-5</z> </position>
+    <lookat> <x>14</x> <y>0</y> <z>-5</z> </lookat>
+    <up> <x>0</x> <y>1</y> <z>0</z> </up>
+    <fovy>45</fovy>
+    <targetTangent> <x>0</x> <y>0</y> <z>0</z> </targetTangent>
+    <targetTime>30</targetTime>
+  </suggestedCameraView>
+
+  <suggestedCameraView>
+    <position> <x>8</x> <y>50</y> <z>20</z> </position>
+    <lookat> <x>8</x> <y>0</y> <z>-5</z> </lookat>
+    <up> <x>0</x> <y>1</y> <z>0</z> </up>
+    <fovy>100</fovy>
+    <targetTangent> <x>-2</x> <y>0</y> <z>0</z> </targetTangent>
+    <targetTime>60</targetTime>
+  </suggestedCameraView>
+
+  <suggestedCameraView>
+    <position> <x>8</x> <y>35</y> <z>-5</z> </position>
+    <lookat> <x>8</x> <y>0</y> <z>-5</z> </lookat>
+    <up> <x>0</x> <y>0</y> <z>-1</z> </up>
+    <fovy>70</fovy>
+    <targetTangent> <x>0</x> <y>0</y> <z>0</z> </targetTangent>
+    <targetTime>90</targetTime>
+  </suggestedCameraView>
+
+  <agent>
+    <name>A</name>
+    <initialConditions>
+      <radius>0.5</radius>
+      <position> <x>1</x> <y>0</y> <z>-10</z> </position>
+      <direction> <x>1</x> <y>0</y> <z>10</z> </direction>
+      <speed>0</speed>
+    </initialConditions>
+    <goalSequence>
+      <seekStaticTarget>
+        <targetLocation> <x>2</x> <y>0</y> <z>0</z> </targetLocation>
+        <targetTangent> <x>1</x> <y>0</y> <z>0</z> </targetTangent>
+        <targetTime>50</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>3.1</x> <y>0</y> <z>-4</z> </targetLocation>
+        <targetTangent> <x>1</x> <y>0</y> <z>0</z> </targetTangent>
+        <targetTime>100</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>4.2</x> <y>0</y> <z>0</z> </targetLocation>
+        <targetTangent> <x>1</x> <y>0</y> <z>0</z> </targetTangent>
+        <targetTime>150</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>5.9</x> <y>0</y> <z>-10</z> </targetLocation>
+        <targetTangent> <x>0</x> <y>0</y> <z>-1</z> </targetTangent>
+        <targetTime>200</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>6.5</x> <y>0</y> <z>-10</z> </targetLocation>
+        <targetTangent> <x>0</x> <y>0</y> <z>1</z> </targetTangent>
+        <targetTime>250</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>6.5</x> <y>0</y> <z>-2</z> </targetLocation>
+        <targetTangent> <x>0</x> <y>0</y> <z>1</z> </targetTangent>
+        <targetTime>300</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>9</x> <y>0</y> <z>0</z> </targetLocation>
+        <targetTangent> <x>2</x> <y>0</y> <z>0</z> </targetTangent>
+        <targetTime>350</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>11</x> <y>0</y> <z>-2</z> </targetLocation>
+        <targetTangent> <x>0</x> <y>0</y> <z>-2</z> </targetTangent>
+        <targetTime>400</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>9</x> <y>0</y> <z>-4</z> </targetLocation>
+        <targetTangent> <x>-2</x> <y>0</y> <z>0</z> </targetTangent>
+        <targetTime>450</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>7</x> <y>0</y> <z>-2</z> </targetLocation>
+        <targetTangent> <x>2</x> <y>0</y> <z>0</z> </targetTangent>
+        <targetTime>500</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>9</x> <y>0</y> <z>0</z> </targetLocation>
+        <targetTangent> <x>2</x> <y>0</y> <z>0</z> </targetTangent>
+        <targetTime>550</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+
+
+      <seekStaticTarget>
+        <targetLocation> <x>14</x> <y>0</y> <z>0</z> </targetLocation>
+        <targetTangent> <x>2</x> <y>0</y> <z>0</z> </targetTangent>
+        <targetTime>600</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>16</x> <y>0</y> <z>-2</z> </targetLocation>
+        <targetTangent> <x>0</x> <y>0</y> <z>-2</z> </targetTangent>
+        <targetTime>650</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>14</x> <y>0</y> <z>-4</z> </targetLocation>
+        <targetTangent> <x>-2</x> <y>0</y> <z>0</z> </targetTangent>
+        <targetTime>700</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>12</x> <y>0</y> <z>-2</z> </targetLocation>
+        <targetTangent> <x>2</x> <y>0</y> <z>0</z> </targetTangent>
+        <targetTime>750</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+      <seekStaticTarget>
+        <targetLocation> <x>14</x> <y>0</y> <z>0</z> </targetLocation>
+        <targetTangent> <x>2</x> <y>0</y> <z>0</z> </targetTangent>
+        <targetTime>800</targetTime>
+        <desiredSpeed>1.3</desiredSpeed>
+        <timeDuration>10000</timeDuration>
+      </seekStaticTarget>
+
+    </goalSequence>
+  </agent>
+</SteerBenchTestCase>
