@@ -54,19 +54,23 @@ void Curve::drawCurve(Color curveColor, float curveThickness, int window)
 			float tFinal = controlPoints.back().time;
 			Point back = controlPoints.front().position;
 			Point curr = controlPoints.front().position;
-			
-			for(t = window; t <= tFinal; t += window){
-
-				if(t > tFinal - window) //final point
+			//t = window
+			for(t += window; t <= tFinal; t += window){
+			  /*
+			  if(t > tFinal - window) { //final point
+					std::cout << "tend " << t << " point " << curr.x << "," << curr.y << "," << curr.z << std::endl;
 					curr = controlPoints.back().position;
-				else{
+			  } else {
+			  */
 	//Calculate the next point, draw the line, update the tracer
 					calculatePoint(curr, t);
-					//std::cout << "t " << t << " point " << curr.x << "," << curr.y << "," << curr.z << std::endl;
+					std::cout << "t " << t << " point " << curr.x << "," << curr.y << "," << curr.z << std::endl;
 					DrawLib::drawLine(back, curr, curveColor, curveThickness);
 					back = curr;
-				}
+					//}
 			}
+			DrawLib::drawLine(back, controlPoints.back().position, curveColor, curveThickness);
+			
 		}
 	
 	return;
