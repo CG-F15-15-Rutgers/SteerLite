@@ -147,6 +147,7 @@ bool Curve::findTimeInterval(unsigned int& nextPoint, float time)
 Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 {
 	Point newPosition;
+	Util::Vector vect;
 	float normalTime, intervalTime;
 
 	std::cout << "useHermiteCurve" << std::endl;
@@ -175,8 +176,19 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 	//h4 = t^3 - t^2
 	h4 = tcube - tsquare;
 
+	Point p1 = h1 * controlPoints[nextPoint-1].position;
+	Point p2 = h2 * controlPoints[nextPoint].position;
+	Point p3, p4;
+
+	vect = controlPoints[nextPoint-1].tangent * (h3 * intervalTime);
+	p3 = Point(vect[0],vect[1], vect[2]);
+
+	vect = controlPoints[nextPoint].tangent * (h4 * intervalTime);
+	p4 = Point(vect[0],vect[1],vect[2]);
+
 	//h1,h2 correlate with position; h3,h4 correlate with tangent
-	newPosition = (h1*controlPoints[nextPoint-1].position) + (h2*controlPoints[nextPoint].position) + (h3*controlPoints[nextPoint-1].tangent) + (h4*controlPoints[nextPoint].tangent);
+	//newPosition = (h1*controlPoints[nextPoint-1].position) + (h2*controlPoints[nextPoint].position) + (h3*controlPoints[nextPoint-1].tangent) + (h4*controlPoints[nextPoint].tangent);
+	newPosition = p1 + p2 + p3 + p4;
 	// Return result
 	return newPosition;
 }
