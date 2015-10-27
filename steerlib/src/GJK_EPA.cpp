@@ -17,3 +17,11 @@ bool SteerLib::GJK_EPA::intersect(float& return_penetration_depth, Util::Vector&
 {
     return false; // There is no collision
 }
+
+bool SteerLib::GJK_EPA::gjk(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, std::std::vector<Util::Vector>& simplex) {
+
+}
+
+
+
+
