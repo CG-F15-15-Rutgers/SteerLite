@@ -130,6 +130,20 @@ namespace SteerLib
 
         private:
 
+		static bool gjk(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, std::std::vector<Util::Vector>& simplex) 
+
+		static void epa(float& return_penetration_depth, Util::Vector& return_penetration_vector, const std::vector<Util::Vector>& simplex, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB);
+
+		static void getClosestEdge(std::vector<Util::Vector> simplex, float& distance, Util::Vector& normal, int& index);
+
+		static bool checkOrigin(std::vector<Util::Vector>& simplex, Util::Vector& dir);
+
+		static Util::Vector getFarPoint(const std::vector<Util::Vector>& shape, const Util::Vector& dir);
+
+		static Util::Vector getCenter(const std::vector<Util::Vector>& shape);
+
+		static float dotProd(Util::Vector A, Util::Vector B);
+
     }; // class GJK_EPA
 
 } // namespace SteerLib
