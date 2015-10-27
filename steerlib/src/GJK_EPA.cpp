@@ -6,6 +6,7 @@
 
 
 #include "obstacles/GJK_EPA.h"
+#include <limits>
 
 
 SteerLib::GJK_EPA::GJK_EPA()
@@ -19,40 +20,39 @@ bool SteerLib::GJK_EPA::intersect(float& return_penetration_depth, Util::Vector&
 	bool collision = gjk(_shapeA, _shapeB, simplex);
 
 	if(collision)
-		epa(_shapeA, _shapeB, simplex, return_penetration_depth, return_penetration_vector);
+		epa(return_penetration_depth, return_penetration_vector,simplex,_shapeA, _shapeB);
 	/*else{
 		return_penetration_depth = 0;
 		return_penetration_vector.zero();
 	}*/	
 	
-    return colliison;
+    return collision;
 }
 
-bool SteerLib::GJK_EPA::gjk(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, std::std::vector<Util::Vector>& simplex) {
+bool SteerLib::GJK_EPA::gjk(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, std::vector<Util::Vector>& simplex) {
 	Util::Vector centerA = getCenter(_shapeA);
 	Util::Vector centerB = getCenter(_shapeB);
 	Util::Vector dir(1,0,0);
 
-	simplex.push_back((getFarPoint(shapeA, dir) - getFarPoint(shapeB, -dir)));
+	simplex.push_back((getFarPoint(_shapeA, dir) - getFarPoint(_shapeB, -dir)));
 	dir = -dir;
 	
 	while(true){
 		float dotProduct = 0;
-		simplex.push_back((getFarPoint(shapeA, dir) - getFarPoint(shapeB, -dir)));
+		simplex.push_back((getFarPoint(_shapeA, dir) - getFarPoint(_shapeB, -dir)));
 
 		for(int i = 0; i < 3; i++)
 			dotProduct = simplex.back()[i] * dir[i];
 
 		if(dotProduct <= 0) 
 			return false;
-		else if (checkOrigin(simplex, direction))
+		else if (checkOrigin(simplex, dir))
 			return true;
 		}
-	}
 	return false;
 }
 
-void SteerLib::GJK_EPA::epa(float& return_penetration_depth, Util::Vector& return_penetration_vector, const std::vector<Util::Vector>& simplex, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB)
+void SteerLib::GJK_EPA::epa(float& return_penetration_depth, Util::Vector& return_penetration_vector, std::vector<Util::Vector>& simplex, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB)
 {
 	while(true)
 	{
@@ -61,7 +61,7 @@ void SteerLib::GJK_EPA::epa(float& return_penetration_depth, Util::Vector& retur
 		int index;
 		getClosestEdge(simplex, distance, normal, index);
 		
-		Util::Vector help = (getFarPoint(_shapeA, normal) - getFarPoint(_shapeB, -normal))
+		Util::Vector help = (getFarPoint(_shapeA, normal) - getFarPoint(_shapeB, -normal));
 		float d = dotProd(help, normal);
 
 		if(d - distance < 0.00001)
@@ -70,18 +70,19 @@ void SteerLib::GJK_EPA::epa(float& return_penetration_depth, Util::Vector& retur
 			return_penetration_depth = d;
 			return;
 		}
-		else
+		else{
 			simplex.insert(simplex.begin()+index, help);
+		}
 
 	}
 }
 void SteerLib::GJK_EPA::getClosestEdge(std::vector<Util::Vector> simplex, float& distance, Util::Vector& normal, int& index)
 {
 	for(int i = 0; i < simplex.size(); i++){
-		int j = (i + 1 == polygon.size()) ? 0 : i + 1;
+		int j = (i + 1 == simplex.size()) ? 0 : i + 1;
 
-		Util::Vector a = polygon[i];
-		Util::Vector b = polygon[j];
+		Util::Vector a = simplex[i];
+		Util::Vector b = simplex[j];
 		Util::Vector e = b - a;
 		Util::Vector n = (a*dotProd(e, e) - e*dotProd(e,a));
 		n = Util::normalize(n);
@@ -106,15 +107,15 @@ bool SteerLib::GJK_EPA::checkOrigin(std::vector<Util::Vector>& simplex, Util::Ve
 		Util::Vector edgeAB = pointB - pointA;
 		Util::Vector edgeAC = pointC - pointA;
 
-		Util::Vector perpAB = (edgeAB*dotProd(edgeAB, AC) - AC*dotProd(edgeAB,edgeAB));
-		Util::Vector perpAC = (edgeAC*dotProd(edgeAC, edgeAB) - AB*dotProd(edgeAC,edgeAC));
+		Util::Vector perpAB = (edgeAB*dotProd(edgeAB, edgeAC) - edgeAC*dotProd(edgeAB,edgeAB));
+		Util::Vector perpAC = (edgeAC*dotProd(edgeAC, edgeAB) - edgeAB*dotProd(edgeAC,edgeAC));
 
 		if(dotProd(perpAB, aOrigin) > 0){
 			simplex.erase(simplex.begin() + 1);
 			dir = perpAB;
 		}
 		else if(dotProd(perpAC, aOrigin) > 0){
-			simplex.erase(simplex.begin())
+			simplex.erase(simplex.begin());
 			dir = perpAC;
 		}
 		else return true;

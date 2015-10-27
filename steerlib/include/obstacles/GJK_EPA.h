@@ -130,9 +130,9 @@ namespace SteerLib
 
         private:
 
-		static bool gjk(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, std::std::vector<Util::Vector>& simplex) 
+		static bool gjk(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, std::vector<Util::Vector>& simplex); 
 
-		static void epa(float& return_penetration_depth, Util::Vector& return_penetration_vector, const std::vector<Util::Vector>& simplex, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB);
+		static void epa(float& return_penetration_depth, Util::Vector& return_penetration_vector, std::vector<Util::Vector>& simplex, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB);
 
 		static void getClosestEdge(std::vector<Util::Vector> simplex, float& distance, Util::Vector& normal, int& index);
 
