@@ -93,6 +93,7 @@ void Curve::sortControlPoints()
         for(int i = 0; i < controlPoints.size()-1; i++)
 	{
 <<<<<<< HEAD
+<<<<<<< HEAD
 	  int indMinElement = i;
 	  for(int j = i+1; j < controlPoints.size(); j++)
 	  {
@@ -103,6 +104,8 @@ void Curve::sortControlPoints()
 	  }
 	  std::swap(controlPoints[i], controlPoints[indMinElement]);
 =======
+=======
+>>>>>>> 241871090411e4f7f45e75e5e00bee754a791f29
 		//std::cerr << "ERROR>>>>Member function sortControlPoints is not implemented!" << std::endl;
 		flag = true;
 >>>>>>> 241871090411e4f7f45e75e5e00bee754a791f29
