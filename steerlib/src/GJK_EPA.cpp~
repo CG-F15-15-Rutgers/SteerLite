@@ -58,7 +58,7 @@ void SteerLib::GJK_EPA::epa(float& return_penetration_depth, Util::Vector& retur
 		getClosestEdge(simplex, distance, normal, index);
 		
 		Util::Vector help = (getFarPoint(_shapeA, normal) - getFarPoint(_shapeB, -normal));
-		float d = dotProd(help, normal);
+		float d = help * normal;
 
 		if(d - distance < 0.00001)
 		{
@@ -86,6 +86,7 @@ void SteerLib::GJK_EPA::getClosestEdge(std::vector<Util::Vector> simplex, float&
 		float d = dotProd(n, a);
 		if(d < distance)
 		{
+			std::cout<<"gay";
 			distance = d;
 			normal = n;
 			index = j;
