@@ -98,6 +98,14 @@ namespace SteerLib
 			bool computePath(std::vector<Util::Point>& agent_path, Util::Point start, Util::Point goal, SteerLib::GridDatabase2D * _gSpatialDatabase, bool append_to_path = false);
 		private:
 			SteerLib::GridDatabase2D * gSpatialDatabase;
+
+			double getHE(Util::Point start, Util::Point finish);
+			int popFringe(std::set<int> &openSet, std::map<int, double> fScore, std::map<int, double> gScore);
+			void reconstruction(std::vector<Util::Point>& agent_path, std::map<int, int> source, int goalIndex);
+			std::set<int> getNeighbours(SteerLib::GridDatabase2D * _gSpatialDatabase, int index);
+			bool onGrid(SteerLib::GridDatabase2D * _gSpatialDatabase, int index);
+
+
 	};
 
 
