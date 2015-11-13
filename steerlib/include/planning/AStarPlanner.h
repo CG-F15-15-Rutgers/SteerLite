@@ -96,15 +96,57 @@ namespace SteerLib
 			*/
 
 			bool computePath(std::vector<Util::Point>& agent_path, Util::Point start, Util::Point goal, SteerLib::GridDatabase2D * _gSpatialDatabase, bool append_to_path = false);
+
+			struct comparator1
+			{
+				bool operator()(SteerLib::AStarPlannerNode a, SteerLib::AStarPlannerNode b) const
+				{
+					if (abs(distanceBetween(a.point,b.point)) < 0.001) {
+						return false;
+					}
+					if(a.point.x == b.point.x)
+					{
+						return a.point.z < b.point.z;
+
+					}
+					else
+					{
+					return a.point.x < b.point.x;
+					}
+				}
+			};
+
+		struct comparator2
+			{
+				bool operator()(Util::Point a, Util::Point b) const
+				{
+					if (distanceBetween(a,b) < 0.001) {
+						return false;
+					}
+					if(a.x == b.x)
+					{
+						return a.z < b.z;
+
+					}
+					else
+					{
+					return a.x < b.x;
+					}
+
+				}
+			};
+
+			double getH(Util::Point start, Util::Point finish);
+
+			void doNeighbourStuff(Util::Point start, Util::Point goal, std::map<Util::Point,SteerLib::AStarPlannerNode,comparator2>& nodeMap,
+std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& sourceMap, std::vector<Util::Point>& closedSet, std::vector<Util::Point>& openSet);
+
+			std::vector<Util::Point> getNeighbours(Util::Point start);
+
+			void add(Util::Point curr, SteerLib::AStarPlannerNode start, Util::Point goal, double cost, std::map<Util::Point,SteerLib::AStarPlannerNode,comparator2>& nodeMap,std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& sourceMap, std::vector<Util::Point>& closedSet, std::vector<Util::Point>& openSet);
+			
 		private:
 			SteerLib::GridDatabase2D * gSpatialDatabase;
-
-			double getHE(Util::Point start, Util::Point finish);
-			int popFringe(std::set<int> &openSet, std::map<int, double> fScore, std::map<int, double> gScore);
-			void reconstruction(std::vector<Util::Point>& agent_path, std::map<int, int> source, int goalIndex);
-			std::set<int> getNeighbours(SteerLib::GridDatabase2D * _gSpatialDatabase, int index);
-			bool onGrid(SteerLib::GridDatabase2D * _gSpatialDatabase, int index);
-
 
 	};
 
