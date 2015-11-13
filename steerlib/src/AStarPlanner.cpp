@@ -24,7 +24,7 @@
 
 //change these variables for diff parts
 //Part 1 - manhattan or euclidian
-#define MANHATTAN true
+#define MANHATTAN false
 //Part 2 - smaller G -1, Larger G 1, if doing part 1 set to 0.
 #define gBreak 0
 //Part 3 - increase diagonal costs (set 2 to Larger G)
@@ -97,7 +97,7 @@ namespace SteerLib
 		//agent_path.clear();
 
 		int minFScore = 0; int minFIndex = 0;
-		double GScore = 0.0; double cost = 0.0; double len = 0.0;
+		double GScore, len;
 
 		//prepare the first node to use
 		SteerLib::AStarPlannerNode startNode(start, 0, getH(start, goal), nullptr);
@@ -184,7 +184,8 @@ std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& s
 		double cost = std::numeric_limits<double>::max();
 
 		SteerLib::AStarPlannerNode og = nodeMap.at(start);
-		std::vector<Util::Point> neighbours = getNeighbours(start);
+		std::vector<Util::Point> neighbours;
+		neighbours = getNeighbours(start);
 
 		for(int i = 0; i < neighbours.size(); i++)
 		{
@@ -194,8 +195,10 @@ std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& s
 
 	std::vector<Util::Point> AStarPlanner::getNeighbours(Util::Point start)
 	{
-		int index = gSpatialDatabase->getCellIndexFromLocation(start);
+		int index;
 		unsigned int x,z;
+
+		index = gSpatialDatabase->getCellIndexFromLocation(start);
 
 		std::vector<Util::Point> neighbours;
 		Util::Point neighbor;
@@ -203,9 +206,20 @@ std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& s
 		gSpatialDatabase->getGridCoordinatesFromIndex(index,x,z);
 
 		int minX = MAX(x-1, 0);
-		int maxX = MAX(x+1, gSpatialDatabase->getNumCellsX());
+		int maxX = MIN(x+1, gSpatialDatabase->getNumCellsX());
 		int minZ = MAX(z-1, 0);
-		int maxZ = MAX(z+1, gSpatialDatabase->getNumCellsZ());
+		int maxZ = MIN(z+1, gSpatialDatabase->getNumCellsZ());
+
+		/*for(int i = minX; i <= maxX; i+=GRID_STEP)
+			for(int j = minZ; j <= maxZ; j+=GRID_STEP)
+			{
+				int ind = gSpatialDatabase->getCellIndexFromGridCoords(i,j);
+				if(ind != index)
+				{
+					neighbor = getPointFromGridIndex(ind);
+					neighbours.push_back(neighbor);
+				}
+			}*/
 
 		for(int i = minX; i <= maxX; i+=GRID_STEP)
 			for(int j = minZ; j <= maxZ; j+=GRID_STEP)
@@ -213,7 +227,22 @@ std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& s
 				int ind = gSpatialDatabase->getCellIndexFromGridCoords(i,j);
 				if(ind != index)
 				{
+					neighbor = getPointFromGridIndex(ind);
+
+					if(MANHATTAN)
+					{
+						if(neighbor.x == start.x || neighbor.z == start.z)
+						{
+							neighbours.push_back(neighbor);
+							
+						}
+					}
+					else
+					{
+						
 					neighbours.push_back(neighbor);
+					
+					}
 				}
 			}
 		return neighbours;
@@ -222,12 +251,11 @@ std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& s
 	void AStarPlanner::add(Util::Point curr, SteerLib::AStarPlannerNode start, Util::Point goal, double cost, std::map<Util::Point,SteerLib::AStarPlannerNode,comparator2>& nodeMap,std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& sourceMap, std::vector<Util::Point>& closedSet, std::vector<Util::Point>& openSet)
 	{
 		int index = gSpatialDatabase->getCellIndexFromLocation(curr);
-		float distance;
 		double newScore;
-		std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>::iterator sourceIter;
 
 		//check if node is traversable
 		if(!canBeTraversed(index)) return;
+
 		if(nodeMap.count(curr) == 0)
 		{
 			SteerLib::AStarPlannerNode temp(curr, cost, cost, &start);
@@ -245,7 +273,7 @@ std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& s
 
 		if(std::find(openSet.begin(), openSet.end(), curr) == openSet.end())
 			openSet.push_back(curr);
-		else if(nodeMap.at(curr).g <= newScore) return;
+		else if(nodeMap.at(curr).g < newScore) return;
 
 		SteerLib::AStarPlannerNode temp(curr, newScore, newScore + getH(curr, goal), &start);
 		nodeMap.erase(curr);
@@ -254,7 +282,6 @@ std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& s
 		if(sourceMap.count(temp) != 0) sourceMap.erase(temp);
 		sourceMap.emplace(temp, start);
 	}
-
 
 	double AStarPlanner::getH(Util::Point start, Util::Point finish){
 		//use manhattan
