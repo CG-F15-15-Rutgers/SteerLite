@@ -210,38 +210,23 @@ std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& s
 		int minZ = MAX(z-1, 0);
 		int maxZ = MIN(z+1, gSpatialDatabase->getNumCellsZ());
 
-		/*for(int i = minX; i <= maxX; i+=GRID_STEP)
-			for(int j = minZ; j <= maxZ; j+=GRID_STEP)
-			{
-				int ind = gSpatialDatabase->getCellIndexFromGridCoords(i,j);
-				if(ind != index)
-				{
-					neighbor = getPointFromGridIndex(ind);
-					neighbours.push_back(neighbor);
-				}
-			}*/
 
 		for(int i = minX; i <= maxX; i+=GRID_STEP)
 			for(int j = minZ; j <= maxZ; j+=GRID_STEP)
 			{
-				int ind = gSpatialDatabase->getCellIndexFromGridCoords(i,j);
+				int newIndex = gSpatialDatabase->getCellIndexFromGridCoords(i,j);
 				if(ind != index)
 				{
-					neighbor = getPointFromGridIndex(ind);
 
 					if(MANHATTAN)
 					{
-						if(neighbor.x == start.x || neighbor.z == start.z)
-						{
-							neighbours.push_back(neighbor);
-							
-						}
+						if(neighbor.x == start.x)
+							if(neighbor.z == start.z)
+							neighbours.push_back(getPointFromGridIndex(newIndex));
 					}
 					else
 					{
-						
-					neighbours.push_back(neighbor);
-					
+					neighbours.push_back(getPointFromGridIndex(newIndex));
 					}
 				}
 			}
