@@ -215,7 +215,7 @@ std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& s
 			for(int j = minZ; j <= maxZ; j+=GRID_STEP)
 			{
 				int newIndex = gSpatialDatabase->getCellIndexFromGridCoords(i,j);
-				if(ind != index)
+				if(newIndex != index)
 				{
 
 					if(MANHATTAN)
