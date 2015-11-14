@@ -24,7 +24,7 @@
 
 //change these variables for diff parts
 //Part 1 - manhattan or euclidian
-#define MANHATTAN false
+#define MANHATTAN true
 //Part 2 - smaller G -1, Larger G 1, if doing part 1 set to 0.
 #define gBreak 0
 //Part 3 - increase diagonal costs (set 2 to Larger G)
@@ -217,17 +217,7 @@ std::map<SteerLib::AStarPlannerNode, SteerLib::AStarPlannerNode, comparator1>& s
 				int newIndex = gSpatialDatabase->getCellIndexFromGridCoords(i,j);
 				if(newIndex != index)
 				{
-
-					if(MANHATTAN)
-					{
-						if(neighbor.x == start.x)
-							if(neighbor.z == start.z)
-							neighbours.push_back(getPointFromGridIndex(newIndex));
-					}
-					else
-					{
 					neighbours.push_back(getPointFromGridIndex(newIndex));
-					}
 				}
 			}
 		return neighbours;
