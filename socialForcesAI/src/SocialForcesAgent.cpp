@@ -746,7 +746,7 @@ bool SocialForcesAgent::runLongTermPlanning()
 	// run the main a-star search here
 	std::vector<Util::Point> agentPath;
 	Util::Point pos = position();
-	astar.computePath(agentPath, pos, _goalQueue.front().targetLocation, gSpatialDatabase, true);
+	aStarPlanner.computePath(agentPath, pos, _goalQueue.front().targetLocation, gSpatialDatabase, true);
 	
 
 	for (int i = 1; i < agentPath.size(); i++)
@@ -756,6 +756,14 @@ bool SocialForcesAgent::runLongTermPlanning()
 		{
 			_waypoints.push_back(agentPath.at(i));
 		}
+	}
+	if (agentPath.size()>0)
+	{
+		for (int i = 1; i<agentPath.size(); ++i)
+		{
+			Util::DrawLib::drawLine(agentPath[i - 1], agentPath[i], Util::Color(1.0f, 0.0f, 0.0f), 2);
+		}
+		//Util::DrawLib::drawCircle(__path[__path.size()-1], Util::Color(0.0f, 1.0f, 0.0f));
 	}
 
 	return true;
